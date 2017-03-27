@@ -8,10 +8,10 @@
     %    from a subset if channels (typically 7 channels)
     % command_string : Python command that will be run in each subfolder
 
-% This proces can be performed in the background when predefining the
-% srcDirectory:
-    % job = batch('batch_Klusta', 'CurrentFolder', srcDirectory, 'CaptureDiary', true);
-    
+% The script is designed to reun in batch_KlustaKwik.m 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% uncomment this section when running the script on its own
 %% Define the parameters for batch processing of spiking data with KlustaKwik
 % Define the source directory
 %     Dir = 'E:\DATA Electrophysiology\';
@@ -20,7 +20,7 @@
 % % Define the subfolders where the command needs to be run
 %     folders = dir([srcDirectory '\channels*'] ); folders = {folders.name};
 %     % folders = {'\channels 01-07' '\channels 06-12' '\channels 11-17' '\channels 16-22' '\channels 21-27' '\channels 26-32'};
-% 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %% Run KlustaKwik in all subfolders
 % Define the python command that needs to be run
