@@ -1,11 +1,15 @@
 # Ephys-Laminar
 
 These MATLAB scripts allow to analyze data from extracellular recordings on a MU and SU level
+
 Many of the includes originally come from https://github.com/departutto/laminar
 
 Recordings:   Neuralynx cheetah system
+
 Probe:        Neuronexus A1x32-edge-10mm-20-177-CM32
+
 Clustering:   Klusta-Team https://github.com/klusta-team
+
 Includes:     Functions that are used in the scripts below
 
 - batch_convertNCS2Dat.m
