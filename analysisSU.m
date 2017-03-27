@@ -40,12 +40,11 @@ clear fullpath* waveforms*
 %% plot the PSTH with prespecified Y-axis limits
 
 lim = [-10 20 ];
-plotPSTHsPerCondition%_exp33
+plotPSTHsPerCondition
 
 clear before after lim
 %% Save the Trial as a .mat file for future reference
-%  x       = strfind(currentSession, '- ') + 2;
-%  session = currentSession(x:end);
+
 spikes = size(selectedSpikeTimestampsInUsec,2);
 outFile = ['11-24_TC2_Ch06-12_clu' num2str(selectedClusters') '_#' num2str(spikes)];
 outFile = strrep(outFile, ' ', '_');
@@ -62,43 +61,3 @@ saveas(gca , figName, 'jpeg');
 close all
 
 clear spikes outFile ha fileName figName selectedSpikeTimestampsInUsec selectedClusters
-
-%% process the data
-% 
-% % Define the PSTH plot and save figure
-% binWidth = 20;
-% nRows    = 2;
-% nColumns = 3;
-% h        = 25;
-% 
-% [psths, trialFR, Peaks, medianFR] = plotPSTH(trial, binWidth, nRows, nColumns, before, after, h);
-% 
-% clear binWidth n* h
-
-%% Create raster plot per condition
-% spikes = {trial.spikes}.';
-% start = {trial.start}.';
-% condition = {trial.condition}.';
-% C = cellfun(@minus,spikes,start,'Un',0);
-% condition = [trial(1).condition].';
-% 
-% for i = 1:6
-%     conditionIndices = conditions == i;
-%     subplot(2,3,i);
-%     plotSpikeRaster(C(conditionIndices),'PlotType','vertline');
-%     xlim([0 900000])
-% end
-% %plotSpikeRaster(C,'PlotType','scatter');
-%% Save data
-% x       = strfind(currentSession, '- ') + 2;
-% session = currentSession(x:end);
-% outFile = [session '_Clu_' num2str(selectedClusters')];
-% outFile = strrep(outFile, ' ', '_');
-% outFile = strrep(outFile, '__', '_');
-% saveas(gca ,[currentSession '\' outFile '.tif'], 'tif');
-% csvwrite([currentSession '\trialFR_' outFile '.csv'] ,trialFR);
-% csvwrite([currentSession '\medianFR_' outFile '.csv'] ,medianFR);
-% csvwrite([currentSession '\PSTH_' outFile '.csv'] , psths);
-
-%close all
-%clear y trialFR Peaks medianFR selected* after before ans x outFile
