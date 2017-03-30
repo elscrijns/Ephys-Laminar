@@ -5,7 +5,11 @@
 % Selectivity for reference SF should differ between orientations
 
 
-%% Load the data: trial structures per cluster
+%% Load the data: Select the folder containing trial structures per cluster
+    % trial = struct('start' 'onset' 'offset' 'condition' 'spikes')
+        % Contains information on timing of stimulus presentation, type of stimulus
+        % and timing of spiking activity. All times expressed in uSec, should be
+        % converted to ms -> time/10^3
 clear all
 
 Dir = 'E:\DATA Electrophysiology\';
@@ -36,14 +40,11 @@ n = size(fileNames,1)
     edges       = -before:binWidth:after; % msec.
     onsetIndex  = (before - binWidth / 2) / binWidth + 1;
     offsetIndex = (before+stimDur - binWidth/2) / binWidth + 1;
- 
+    
+ % Process each cluster file 
 for f = 1:n
     
 load([Dir '\' fileNames(f).name]);
-    % trial = struct('start' 'onset' 'offset' 'condition' 'spikes')
-    % Contains information on timing of stimulus presentation, type of stimulus
-    % and timing of spiking activity. All times expressed in uSec, should be
-    % converted to ms -> time/10^3
 fileName = fileNames(f).name;
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -58,7 +59,7 @@ fileName = fileNames(f).name;
     p = [];
     
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%% For every trial the psth are calculated %%%
+% For every trial the psth are calculated
 
     for i = 1:length(trial)
         spikeTimings     = (trial(i).spikes - trial(i).onset) / 10.0 ^ 3; % msec.
@@ -83,7 +84,7 @@ fileName = fileNames(f).name;
     
     clear i psths
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%     Calculate for each condition the mean net FR, SD                %%%
+%  Calculate for each condition the mean net FR & SD
 
    con2 = find(conditions == 2);
         FR2 = mean(netFR(con2));
@@ -132,7 +133,6 @@ fileName = fileNames(f).name;
    
    % do any of the stimuli lead to a significant response? 
    if any(test == 1) & (FR2>1 | FR5>1)
-   %if BL(f) > 2
         SignClu(f) = 1;
         ref  = ttest2(immediateFR(con2),immediateFR(con5), 'Vartype','unequal');
         low  = ttest2(immediateFR(con1),immediateFR(con4), 'Vartype','unequal');
@@ -149,12 +149,7 @@ fileName = fileNames(f).name;
    end
   clear S ref low high
 
-% Test difference in orientation selectivity between pairs of SF      
-%     ref(f)  = ttest(netFR(con2),netFR(con5));
-%     low(f)  = ttest(netFR(con1),netFR(con4));
-%     high(f) = ttest(netFR(con3),netFR(con6));  
-
-% Define the prefered orientation and group 
+  % Define the prefered orientation and group 
     if FR2 > FR5
        Pref(f,:)    = [FR1,FR2,FR3];
        SEMpref(f,:)  = [SD1,SD2,SD3];
@@ -183,25 +178,15 @@ end
      Sign = sum(SignSel)
      
      clear before after onsetIndex offsetIndex stimDus sustainedIndex f edges fileName
-     
-    %xlswrite([Dir '\SelectiveClusters.xls' ], {fileNames(SignSel).name}', 'Rec 11-09')
-%% summarize & save results in table
 
-%     nSEMpref  = sem(nPref);
-%     nSEMnonPref = sem(nnonPref); 
-% % Select the clusters where atleast one of the figures results in a
-% % significant response
-% 
-%    Preffered    = table(Pref(SignClu,:), SEMpref(SignClu,:), testPref(SignClu,:), 'VariableNames', {'Mean', 'StDev', 'ttest'})
-%    nonPreffered = table(nonPref(SignClu,:), SEMnonPref(SignClu,:), testnonPref(SignClu,:), 'VariableNames', {'Mean', 'StDev', 'ttest'})
-%     %ref(SignClu)
+%% summarize & save results in table
 
 files = {fileNames.name}';
 T = table(files, BL, Pref, SEMpref, testPref, nonPref, SEMnonPref, testnonPref, SignSel');
 writetable(T,[Dir '\selectivity.csv']);
 
-  %% Plot the normalized data (normalize to stim2 = 1) 
-  %     Selective responses only
+%% Plot the normalized data (normalize to stim2 = 1) 
+  % For selective clusters only
   
  figure;
  hold on
@@ -213,21 +198,20 @@ writetable(T,[Dir '\selectivity.csv']);
         set(gca, 'FontSize', 14);
         ylabel('Normalized Firing Rate (mean+SEM)')
     [h,p, ci, stats] = ttest(nPref(SignSel,:),nnonPref(SignSel,:),'Tail', 'right')
-    
     title(['Significantly Selective, n=' num2str(sum(SignSel))])
-    %text([2 3],[1.1 1.1],'*','FontSize' ,18)
  hold off 
  
- %% plot selectivity
+%% plot selectivity
+ figure;
  hold on
- Selectivity = nPref(SignSel,:) - nnonPref(SignSel,:);
- selMean = mean(Selectivity);
- selSEM  = sem(Selectivity);
- errorbar(selMean, selSEM)
+   Selectivity = nPref(SignSel,:) - nnonPref(SignSel,:);
+   selMean = mean(Selectivity);
+   selSEM  = sem(Selectivity);
+   errorbar(selMean, selSEM)
+   legend('Pre-exposure','Post-exposure')
+   title('Selectivity (nPref-nnonPref)')
  
- legend('Pre-exposure','Post-exposure')
- title('Selectivity (nPref-nnonPref)')
-%% distribution of BL responses
+%% plot the distribution of BL responses
 M = ceil(max(BL));
 
 figure;
@@ -244,34 +228,16 @@ xlabel('Baseline (spikes/s)')
 
 title('Selective clusters')
 
-
-%% Plot the normalized data (normalize to stim2 = 1) 
-%   Significant responses only
-figure;
- hold on
-    errorbar(mean(nPref(SignClu,:), 'omitnan'),sem(nPref(SignClu,:)) )
-    errorbar([1.1 2.1 3.1],mean(nnonPref(SignClu,:), 'omitnan'), sem(nnonPref(SignClu,:)))
-        legend('Preffered orientation', 'Opposite orientation')
-        set(gca, 'XTick', [1 2 3]);
-        set(gca, 'XTickLabel', {'low SF', 'reference', 'high SF'});
-        set(gca, 'FontSize', 14);
-        ylabel('Normalized Firing Rate (mean+SEM)')
-    [h,p, ci, stats] = signrank(nPref(SignClu,:),nnonPref(SignClu,:))
-    title(['Responsive Clusters, n=' num2str(sum(SignClu))])
-    %text([2 3],[1.1 1.1],'*','FontSize' ,18)
- hold off 
-
-
 %% Plot the individual data for Preffered & nonPreffered orientation
 figure;
-plot(Pref')
-title('Preffered orientation')
-%ylim([-10 10])
+  plot(Pref')
+  title('Preffered orientation')
+  %ylim([-10 10])
 
 figure;
-plot(nonPref')
-title('non-preffered orientation')
-%ylim([-10 10])
+  plot(nonPref')
+  title('non-preffered orientation')
+  %ylim([-10 10])
 
 %% Individual selectivity plots based on normalized responses
 
@@ -279,15 +245,14 @@ nRows = 3;
 nColumns  = 3;
 currentSubplot = 1;
 
-for i = 1:n
+for i = 1:n %for each cluster file
     
    if mod(currentSubplot, nRows * nColumns) == 1
         figure;
         currentSubplot = 1;
    end
    
-  %if Selective(i) == 1
-  if SignSel(i) == 1
+   if SignSel(i) == 1
    subplot(nRows, nColumns, currentSubplot)
    hold on
         errorbar(Pref(i,:), SEMpref(i,:))
@@ -327,12 +292,12 @@ figure;
         plot(repmat(2.1,n,1), nonPref(:,2), '*k')
         plot(repmat(3.1,n,1), nonPref(:,3), '*k')
         text([2 3],[3 3],'*','FontSize' ,18)
-%ylim([0 1])
- hold off 
+hold off
+ 
 %% Plot the normalized data of all clusters (normalize to stim2 = 1)
 
 figure;
- hold on
+hold on
     errorbar(mean(nPref),sem(nPref))
     errorbar([1.1 2.1 3.1],mean(nnonPref),sem(nnonPref))
         legend('Preffered orientation', 'Opposite orientation')
@@ -342,17 +307,15 @@ figure;
         ylabel('Normalized Firing Rate')
     ttest(nPref,nnonPref)
         title('Normalized response of all clusters')
-        %text([ 3],[ 1.5],'*','FontSize' ,18)
  hold off 
 
 %% plot selectivity
 
-Selectivity = Pref-nonPref;%./Pref;
-hold on 
-%figure;
-errorbar(mean(Selectivity),sem(Selectivity));
-title('Difference in Selectivity')
-set(gca, 'XTick', [1 2 3]);
-set(gca, 'XTickLabel', {'low SF', 'reference', 'high SF'});
-set(gca, 'FontSize', 14);
-ylabel('(P-N) (mean+SEM)')
+Selectivity = Pref-nonPref;
+figure; hold on;
+    errorbar(mean(Selectivity),sem(Selectivity));
+    title('Difference in Selectivity')
+    set(gca, 'XTick', [1 2 3]);
+    set(gca, 'XTickLabel', {'low SF', 'reference', 'high SF'});
+    set(gca, 'FontSize', 14);
+    ylabel('(P-N) (mean+SEM)')
