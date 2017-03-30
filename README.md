@@ -7,41 +7,27 @@
 
   Recordings:   Neuralynx cheetah system
  
-  Probe:        Neuronexus A1x32-edge-10mm-20-177-CM32
+  Probe:        Neuronexus 32 channel probe (A1x32-edge-10mm-20-177-CM32)
  
   Clustering:   Klusta-Team https://github.com/klusta-team
  
   Includes:     Functions that are used in the scripts below
  
- 
 
-- batch_convertNCS2Dat.m
+1) batch_convertNCS2Dat.m : convertNCS2Dat.m converts the neuralynx NCS files to Matlab data files. The batch file runs this conversion on 6 overlapping groups of 7 channels. For each group a 'Channels ##-##' folder needs to be present where the .dat and .dat.mat files are saved for further analysis.
 
-Converts the neuralynx NCS files to Matlab data files
-NCS files are grouped per 7 channels into 1 .dat file
-
-- batch_KlustaKwik.m
-runs KlustaKwik.m as a batch job on a worker
-the clustering is performed for each .dat file in python using the Klusta suite
+2) batch_KlustaKwik.m : runs KlustaKwik.m as a batch job on a worker. The clustering is performed per channels-folder in python using the Klusta suite.
    
-- analysisMUA.m
-MU activity can be plotted as a PSTH for each group of 7 channels
-PSTH can also be plotted for each cluster or a set of clusters individually
+3) analysisMUA.m : MU activity can be calculated and plotted as a PSTH for each channels-folder. PSTHs can also be plotted individually for each cluster or a set of clusters.
 
  Perform manual confirmation of clustering in KlustaViewa and select SU clusters that are possible responsive to our stimuli
 
-- analysisSU.m
-SU activity is plotted as a PSTH and the figure can be saved.
-Spikecounts of the relevant cluster(s) is extracted and saved for further analysis.
+4) analysisSU.m : SU activity is plotted as a PSTH and the figure can be saved. Spikecounts of the relevant cluster(s) is extracted and saved for further analysis.
    
- Statistical analysis on all selected SUs
+ Statistical analysis on all selected SUs (Select a folder with cluster.mat files to analyze)
 
-- selectivity_meanResponses
-Test all selected SU clusters for significant responses and selectivity
+- selectivity_meanResponses : Tests all selected SU clusters for significant responses and selectivity based on the spikecounts
   
-- summaryPSTHsPerdCondition.m
-Make summary PSTHs combining all selected clusters
+- summaryPSTHsPerdCondition.m : Generates summary PSTHs combining all selected clusters with a subplot for each condition
 
-- summaryPSTHsResponsiveConditions.m
-Select a folder with cluster.mat files to analyze
-Make summary PSTH for all conditions that are responsive in the selected clusters
+- summaryPSTHsResponsiveConditions.m : Define the conditions that are responsive and make one summary PSTH to define the response pattern of the MU region
