@@ -14,14 +14,17 @@ Dir = 'E:\DATA Electrophysiology\';
 currentSession = uigetdir(Dir, 'Select the recording session you want to analyze');
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% extract all the required behavioral data for the selected session
+% extract all the required behavioral data for the selected session from Events.nev
+% and save the trial structure:
+% 
 
 filename    = [currentSession '\Events.nev'];
 trial       = extractBehaviouralData(filename);
 save([currentSession '\trial.mat'], 'trial' )
 
 clear fileNEV filename Dir
-%  load([currentSession '\trial.mat'])
+% or the trial structure can be loaded if generated previously
+% load([currentSession '\trial.mat'])
 
 %% Extract SpikeWaveforms and Timestamps
 

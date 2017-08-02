@@ -1,6 +1,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
 %   Original script by Dzmitry Khaliukhovic
+%   Edit by Els Crijns
 %
 %   Extracting behavioral data from a recording session 
 %   Input: Events.nev
