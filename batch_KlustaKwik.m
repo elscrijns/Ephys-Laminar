@@ -9,8 +9,8 @@ folders = dir([srcDirectory '\channels*'] ); folders = {folders.name};
 
 % Send the KlustaKwik script to the worker
 job = batch('KlustaKwik', 'CurrentFolder', srcDirectory, 'CaptureDiary', true);
-% Clustering is performed in python for each subfolder.
-% The Klusta-suite has to be installed
+    % Clustering is performed in python for each subfolder.
+    % The Klusta-suite has to be installed
 
 % wait(job);   % Wait for the job to finish
 % diary(job)   % Display the diary
