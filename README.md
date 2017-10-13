@@ -14,6 +14,8 @@
   Includes:     Functions that are used in the scripts below
  
 
+Starting with csc##.ncs files saved by the neuralynx cheetah system during recording
+
 1) batch_convertNCS2Dat.m : convertNCS2Dat.m converts the neuralynx NCS files to Matlab data files. The batch file runs this conversion on 6 overlapping groups of 7 channels. For each group a 'Channels ##-##' folder needs to be present where the .dat and .dat.mat files are saved for further analysis.
 
 2) batch_KlustaKwik.m : runs KlustaKwik.m as a batch job on a worker. The clustering is performed per channels-folder in python using the Klusta suite.
