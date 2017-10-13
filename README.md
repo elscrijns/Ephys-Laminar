@@ -22,12 +22,12 @@
 
  Perform manual confirmation of clustering in KlustaViewa and select SU clusters that are possible responsive to our stimuli
 
-4) analysisSU.m : SU activity is plotted as a PSTH and the figure can be saved. Spikecounts of the relevant cluster(s) is extracted and saved for further analysis.
+4) analysisSU.m : SU activity is plotted as a PSTH and the figure can be saved. Spikecounts of the relevant cluster(s) is extracted and saved for further analysis as a cluster.mat file.
    
  Statistical analysis on all selected SUs (Select a folder with cluster.mat files to analyze)
 
 - selectivity_meanResponses : Tests all selected SU clusters for significant responses and selectivity based on the spikecounts
   
-- summaryPSTHsPerdCondition.m : Generates summary PSTHs combining all selected clusters with a subplot for each condition
+- summaryPSTHsPerCondition.m : Generates summary PSTHs combining all selected clusters with a subplot for each condition
 
 - summaryPSTHsResponsiveConditions.m : Define the conditions that are responsive and make one summary PSTH to define the response pattern of the MU region
